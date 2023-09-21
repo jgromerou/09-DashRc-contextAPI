@@ -15,7 +15,7 @@ export const AppRoutes = () => {
     checkAuthToken();
   }, []);
 
-  if (!state.isLogged && state.isLoading) {
+  if (state.isLoading) {
     return <h1>Cargando.. </h1>;
   }
 

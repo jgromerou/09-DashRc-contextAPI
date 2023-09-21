@@ -55,6 +55,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const token = localStorage.getItem('tokenRc');
       if (!token) {
+        console.log('entro');
         return dispatch({
           type: types.auth.onLogout,
           payload: {
