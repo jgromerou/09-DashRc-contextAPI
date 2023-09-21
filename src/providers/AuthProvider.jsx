@@ -41,6 +41,33 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const createUser = async (name, lastname, email, password) => {
+    try {
+      const { data } = await dashAxios.post('auth/user/create', {
+        name,
+        lastname,
+        email,
+        password,
+      });
+      localStorage.setItem('tokenRc', data.res.token);
+      dispatch({
+        type: types.auth.onLogin,
+        payload: {
+          user: data.res,
+        },
+      });
+    } catch (error) {
+      const { data } = error.response;
+
+      dispatch({
+        type: types.auth.onLogout,
+        payload: {
+          errorMessage: data.msg,
+        },
+      });
+    }
+  };
+
   const logout = () => {
     localStorage.clear();
     dispatch({
@@ -55,7 +82,6 @@ export const AuthProvider = ({ children }) => {
     try {
       const token = localStorage.getItem('tokenRc');
       if (!token) {
-        console.log('entro');
         return dispatch({
           type: types.auth.onLogout,
           payload: {
@@ -93,6 +119,7 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         checkAuthToken,
+        createUser,
       }}
     >
       {children}
